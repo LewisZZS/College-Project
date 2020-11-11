@@ -1,0 +1,55 @@
+---
+title: "Individual Project"
+author: "Lewis Zhang"
+date: "2020/5/2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+```{r}
+Prodata<-read.csv("Econ220DataS20_ano.csv")
+# Create the empty variable for my edited dataset
+myData <- NA
+
+prop.table(table(Prodata$q76)) # check if data needs cleaning
+myData$basketball.fan<-Prodata$q76
+
+class(Prodata$q77)
+data.frame(table(Prodata$q77)) # check if data needs cleaning
+summary(Prodata$q77)
+myData$shock.scale<-as.numeric(Prodata$q77)
+
+class(Prodata$q169) # check type
+data.frame(table(Prodata$q169)) # check if data needs cleaning
+myData$watchsports<-Prodata$q169
+```
+
+
+## Setting up the Research Question
+```{r}
+# a. My data comes from a survay on my Econ 220 class. The survey collected more than one students answers to a all-round question list, such as your gender, your nationality, your hobby...
+
+# b. A few months ago, the tragic passing of Kobe Bryant triggered a public outpouring of grief. A lot of people around us paid tribute to him, while many even had not watched his game. In my dataset, there is a question asking how shock you were (in a scale of 1-10) after you heard about Kobe's tragedy. I choose it to be my response variable, as I am intesesting in exploring whether Kobe's influence on my generation has gone beyond basketball.
+
+# c. There are two key variables in the dataset that can help me to address my research curosity. The first one is a categorical variable, whether you watch basketball. The other one is a more specific numerical variable, how many hours a week do you spend playing sports or watching sports (any kinds of sports activities). 
+
+# d;e. The relationship between my explanatory variables and my response variable is straightforward. The explanatory variables indicate the basketball participation of each person. I am going to examine whether there is a correlation between the emotional impact of kobe's death to people and people's basketball participation, and it will help me to predict how much Kobe has influenced my generation. Kobe is the best basketball player in our age, but I believe he is far more than an exceptional basketball player to our generation. His Mamba mentality has become a spiritual culture, and inspired countless adolescents.
+```
+
+![](/Users/zisha/Desktop/College/Academics/Lab/econ 220/Memory.jpg)
+
+```{r}
+# a,b.
+myData %>% 
+  filter(!is.na(watchsports)) %>%
+  ggplot(mapping=aes(y=shock.scale,x=watchsports)) + geom_point(alpha=0.6, color="blue") + 
+  labs(title="The Emotional Impact of Kobe's Death vs. Sports Engagement") + 
+  geom_smooth(method="lm", alpha = 0.4, color="red") + xlab("How Many Hours People Watch Sports Per Week")+
+  ylab("Shock Scale")
+```
+
